@@ -10,8 +10,9 @@ const ProductList = () => {
   }, []);
 
   const getProducts = async () => {
+    const apiUrl = import.meta.env.VITE_API_URL;
     try {
-      let result = await fetch("http://localhost:5000/products", {
+      let result = await fetch(`${apiUrl}/products`, {
         headers: {
           authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
         },
@@ -34,8 +35,9 @@ const ProductList = () => {
   };
 
   const deleteProduct = async (id) => {
+    const apiUrl = import.meta.env.VITE_API_URL;
     try {
-      let result = await fetch(`http://localhost:5000/product/${id}`, {
+      let result = await fetch(`${apiUrl}/product/${id}`, {
         method: "Delete",
         headers: {
           authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
@@ -51,10 +53,11 @@ const ProductList = () => {
   };
 
   const searchHandle = async (event) => {
-    let key = event.target.value;
+    const key = event.target.value;
+    const apiUrl = import.meta.env.VITE_API_URL;
     try {
       if (key) {
-        let result = await fetch(`http://localhost:5000/search/${key}`, {
+        let result = await fetch(`${apiUrl}/search/${key}`, {
           headers: {
             authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
           },
@@ -73,21 +76,14 @@ const ProductList = () => {
 
   return (
     <div className="pt-20 max-w-7xl mx-auto p-8 bg-gray-50 rounded-lg shadow-lg">
-      {/* Title */}
       <h3 className="text-2xl font-bold text-gray-800 mb-8">Product List</h3>
-
-      {/* Search Bar */}
       <input
         className="w-full p-3 mb-8 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         type="text"
         placeholder="Search Product"
         onChange={searchHandle}
       />
-
-      {/* Error Message */}
       {error && <h2 className="text-red-500 text-lg">{error}</h2>}
-
-      {/* Table Header */}
       <div className="grid grid-cols-6 gap-4 font-semibold text-gray-600 pb-3 border-b border-gray-300">
         <div>S.No</div>
         <div>Name</div>
@@ -96,8 +92,6 @@ const ProductList = () => {
         <div>Company</div>
         <div>Operation</div>
       </div>
-
-      {/* Product List */}
       {products.length > 0 ? (
         products.map((item, index) => (
           <div

@@ -4,8 +4,12 @@ require("./db/config");
 const User = require("./db/User");
 const Product = require("./db/Product");
 const Jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
 
-const jwtKey = "e-comm";
+dotenv.config();
+
+const jwtKey = process.env.JWT_SECRET_KEY;
+const mongoURI = process.env.MONGO_URI;
 const app = express();
 
 app.use(
@@ -144,5 +148,3 @@ function verifyToken(req, res, next) {
 app.listen(5000, () => {
   console.log("server is running at port 5000");
 });
-
-

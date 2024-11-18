@@ -6,26 +6,50 @@ const AddProduct = () => {
   const [category, setCategory] = useState("");
   const [company, setCompany] = useState("");
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);  // Added loading state
+  const [success, setSuccess] = useState(false);  // Success message state
 
   const addProduct = async () => {
-    console.log(name);
     if (!name || !price || !category || !company) {
       setError(true);
       return false;
     }
 
-    console.log(name, price, category, company);
+    setError(false);  // Reset error state on new submission
+    setLoading(true);  // Start loading indicator
+
     const userId = JSON.parse(localStorage.getItem("user"))._id;
-    let result = await fetch("http://localhost:5000/add-product", {
-      method: "post",
-      body: JSON.stringify({ name, price, category, company, userId }),
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
-      },
-    });
-    result = await result.json();
-    console.log(result);
+    const apiUrl = import.meta.env.VITE_API_URL;  // Use environment variable for the URL
+
+    try {
+      const response = await fetch(`${apiUrl}/products/add`, {
+        method: "POST",
+        body: JSON.stringify({ name, price, category, company, userId }),
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        },
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setSuccess(true);  // Product added successfully
+        // Reset form fields
+        setName("");
+        setPrice("");
+        setCategory("");
+        setCompany("");
+      } else {
+        setSuccess(false);
+        console.error("Failed to add product:", result);
+      }
+    } catch (error) {
+      console.error("Error adding product:", error);
+      setSuccess(false);
+    }
+
+    setLoading(false);  // Stop loading indicator
   };
 
   return (
@@ -76,11 +100,18 @@ const AddProduct = () => {
         <span className="text-red-500 text-sm">Enter valid company</span>
       )}
 
+      {success && (
+        <div className="text-green-500 text-sm mb-4">
+          Product added successfully!
+        </div>
+      )}
+
       <button
         onClick={addProduct}
         className="w-full py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+        disabled={loading}  // Disable button when loading
       >
-        Add Product
+        {loading ? "Adding..." : "Add Product"}
       </button>
     </div>
   );

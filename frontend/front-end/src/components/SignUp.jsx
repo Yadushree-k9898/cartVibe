@@ -15,7 +15,8 @@ const SignUp = () => {
   }, [navigate]);
 
   const collectData = async () => {
-    let result = await fetch("http://localhost:5000/register", {
+    const apiUrl = import.meta.env.VITE_API_URL;
+    let result = await fetch(`${apiUrl}/register`, {
       method: "POST",
       body: JSON.stringify({ name, email, password }),
       headers: {
@@ -23,7 +24,6 @@ const SignUp = () => {
       },
     });
     result = await result.json();
-    console.log(result);
     localStorage.setItem("user", JSON.stringify(result.result));
     localStorage.setItem("token", JSON.stringify(result.auth));
     if (result) {

@@ -14,7 +14,6 @@ const Login = () => {
   }, [navigate]);
 
   const handleLogin = async () => {
-    console.log(email, password);
     let result = await fetch("http://localhost:5000/login", {
       method: "post",
       body: JSON.stringify({ email, password }),
@@ -23,7 +22,6 @@ const Login = () => {
       },
     });
     result = await result.json();
-    console.log(result);
     if (result.auth) {
       localStorage.setItem("user", JSON.stringify(result.user));
       localStorage.setItem("token", JSON.stringify(result.auth));
@@ -70,6 +68,3 @@ const Login = () => {
 };
 
 export default Login;
-
-
-

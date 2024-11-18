@@ -1,7 +1,7 @@
 import React from "react";
 
 const Profile = () => {
-  const user = JSON.parse(localStorage.getItem("user")); // Retrieving user data from localStorage
+  const user = JSON.parse(localStorage.getItem("user")); 
 
   if (!user) {
     return (
@@ -42,7 +42,7 @@ const Profile = () => {
   function handleLogout() {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    window.location.href = "/login"; // Redirecting to login page
+    window.location.href = "/login"; 
   }
 };
 

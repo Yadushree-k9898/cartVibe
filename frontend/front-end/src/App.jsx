@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Nav from "./components/Nav";
@@ -20,7 +19,7 @@ const App = () => {
   useEffect(() => {
     const apiUrl = import.meta.env.VITE_API_URL;
 
-    fetch(`${apiUrl}/api/products`)
+    fetch(`${apiUrl}/products`) 
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
